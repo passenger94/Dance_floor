@@ -1,4 +1,4 @@
-# Dance_floor
+# Dance Floor
 Shoes apps, demos, experimentations, old renewed ...   
 
  	FivePhilo_Cell_Shoes.rb : Philosophers Diner problem. Using Celluloid for concurrency (you need the gem). Stress test for Shoes  
