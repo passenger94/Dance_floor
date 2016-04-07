@@ -11,6 +11,7 @@ ruby_doc.rb : Ruby documentation in Shoes powered by ri (you obviously need ruby
 
 breakout.rb : a breakout game using video's playlist to manage sounds   
 
+pasty.rb : a clipboard copy/paste manager. An app entirely made of a Shoes::Widget !
 
  	
  	
