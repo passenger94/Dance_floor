@@ -1,5 +1,5 @@
 # Dance Floor
-"Pull on your red Shoes and dance ..."
+"Pull on your red Shoes and dance ..."   
 Shoes apps, demos, experimentations, old renewed ...   
 
 FivePhilo_Cell_Shoes.rb : Philosophers Diner problem. Using Celluloid for concurrency (you need the gem). Stress test for Shoes  
