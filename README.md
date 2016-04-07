@@ -5,7 +5,7 @@ FivePhilo_Cell_Shoes.rb : Philosophers Diner problem. Using Celluloid for concur
 
 expert-tankspank3.rb : sample revisited (no visit method, some event surprising behavior)   
 
-ruby_doc.rb : Ruby documentation in Shoes powered by ri   
+ruby_doc.rb : Ruby documentation in Shoes powered by ri (you obviously need ruby, gems docs installed ...)
 
  	
  	
