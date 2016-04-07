@@ -7,7 +7,7 @@ FivePhilo_Cell_Shoes.rb : Philosophers Diner problem. Using [Celluloid](https://
 
 expert-tankspank3.rb : sample revisited (no visit method, some event surprising behavior)   
 
-ruby_doc.rb : Ruby documentation in Shoes powered by ri (you obviously need ruby, gems docs installed ...)
+ruby_doc.rb : Ruby documentation in Shoes powered by ri (you obviously need ruby + gems docs installed ...)
 
 breakout.rb : a breakout game using video's playlist to manage sounds   
 
