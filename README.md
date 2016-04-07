@@ -8,5 +8,8 @@ expert-tankspank3.rb : sample revisited (no visit method, some event surprising 
 
 ruby_doc.rb : Ruby documentation in Shoes powered by ri (you obviously need ruby, gems docs installed ...)
 
+breakout.rb : a breakout game using video's playlist to manage sounds   
+
+
  	
  	
