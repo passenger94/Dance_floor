@@ -74,7 +74,7 @@ class Philosopher
     changed
     notify_observers("think", @name)
     sleep(rand)
-    sleep @relax
+    slowdown
     
     if @bowl == 0
         @waiter.async.tuck(@name)
