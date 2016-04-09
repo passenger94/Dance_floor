@@ -23,7 +23,7 @@ Shoes.app title: "Symposium", width: 500 do
         transform :center
         radians = 360/@seats * Math::PI/180
         
-        ## philosophers + bowls
+        ## philosophers + bowls + thoughts
         @seats.times do |i|
             # rotate, all transforms are cumulative !!
             rotate 360/@seats
@@ -46,6 +46,8 @@ Shoes.app title: "Symposium", width: 500 do
                 oval 125, 127, 45, 50, center: true, fill: white, stroke: black, strokewidth: 2
                 oval 145, 127, 45, 50, center: true, fill: white, stroke: black, strokewidth: 2
                 oval 138, 130, 70, 50, center: true, fill: white, stroke: black, strokewidth: 2
+                glow 6, inner: true
+                shadow -5, 3, fill: black(0.2)
             end)
             th.move (x*1.24).to_i+150, (y*1.24).to_i+150
         end
