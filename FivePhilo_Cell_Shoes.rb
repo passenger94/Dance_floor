@@ -87,7 +87,7 @@ Shoes.app title: "Symposium", width: 500 do
         @soups.each { |sp| sp.style(radius: 25) }
         @thoughts.each { |t| t.scale 1.0; t.hide }
         @waiter.table.chopsticks.each { |c| c.drawn = true }
-        @naps ||= []
+        @naps = []
         @shhh ||= para "Philosophers nap time ...", top: 450, align: "center"
         @shhh.hide
         philosophers.each_with_index do |philosopher, i|
