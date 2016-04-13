@@ -7,19 +7,17 @@ Shoes.app width: 900, height: 700, title: "Break in your Doc's" do
     style(Shoes::LinkHover, stroke: darkred, underscore: "none")
     
     # get the list of Classes 'ri' knows about, memorize them by first letter of top Class
-    classes = `ri -f ansi -l`.split().reduce({}) do |m,line| 
+    classes = `ri -f ansi -l`.split().each_with_object({}) do |line,m| 
         # Pick only classes, modules ...
-        next m if ("a".."z").include? line[0]
+        next if ("a".."z").include? line[0]
         
         m[line[0]] ||= []
         top = line.split("::")[0]
         m[line[0]] << top unless m[line[0]].include? top
-        m
     end
     
     # build alphabet list of classes able to dynamically 
     # create left index and right ouput area
-#    alphab = classes.reduce([]) do |m,(k,v)|
     alphab = classes.each_with_object([]) do |(k,v),m|
         m << link(k) { 
                 @index.replace( *( v.reduce([]) { |m2, cl| 
@@ -31,7 +29,6 @@ Shoes.app width: 900, height: 700, title: "Break in your Doc's" do
                 )
                 @board.clear
              } << "  "
-#        m
     end
     
     stack do
