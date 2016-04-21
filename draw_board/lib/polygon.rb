@@ -1,44 +1,69 @@
 # encoding: UTF-8
 
-require 'shapes_life'
+require 'shapes_common'
 
-class Polygon < Base
-    include ShapesLife
+class PolygonWidget < Shoes::Widget
+    include ShapesCommon
     
-    def initialize(myApp)
-        super myApp
-        
+    def initialize
         @temps = []
         @points = []   
         @ox, @oy = 0, 0
+        
+        @selecting = false
+        @moving = false
     end
     
-    def draw(button, left, top) 
-        if @current
-            button == 3 ? delete : move(@current)
-        else
-            @points.push [left, top]
-            @temps << @myApp.oval(left, top, 4, fill: @myApp.black)
-            
-            if @points.size == 1
-                @ox, @oy = left, top
-            end
+    def paint(button, left, top)
+        
+        @points.push [left, top]
+        @temps << oval(left, top, 4, fill: black)
+        
+        if @points.size == 1
+            @ox, @oy = left, top
+        end
 
-            if button == 2
-                @points.pop
-                @temps.each &:remove; @temps.clear
+        if button == 2
+            @points.pop
+            @temps.each &:remove; @temps.clear
+            
+            minx = @points.transpose[0].min
+            miny = @points.transpose[1].min
+            @width = @points.transpose[0].max - minx
+            @height = @points.transpose[1].max - miny
+            startx = (@ox > minx ? @ox-minx : 0) + app.stroke_width
+            starty = (@oy > miny ? @oy-miny : 0) + app.stroke_width
+            
+            main_slot = flow left: minx-app.stroke_width*2, top: miny-app.stroke_width*2, 
+                        width: @width+app.stroke_width*2, height: @height+app.stroke_width*2 do
                 
-                shape_p = @myApp.shape left: @ox, top: @oy, stroke: @myApp.stroke_color,
-                            strokewidth: @myApp.stroke_width, fill: @myApp.fill_color do 
-                    @points.each { |p| @myApp.line_to p[0]-@ox, p[1]-@oy }
-                    @myApp.line_to 0, 0
+                shape stroke: app.stroke_color, strokewidth: app.stroke_width,
+                      fill: app.fill_color do 
+                    
+                    move_to startx, starty
+                    @points.each { |p| line_to p[0]-(@ox-startx), p[1]-(@oy-starty) }
+                    line_to startx, starty
                 end
-                shape_p.hover proc { |shp| @current = shp }
-                shape_p.leave proc { |shp| @current = nil }
-                shape_p.click {} # gives a visual feedback of the "active" area
+                @brd = border darkorange, dash: :onedot, hidden: true
                 
-                @points.clear
+                hover { |slot| 
+                }
+                leave { |slot|
+                }
+                click { |b,l,t|
+                    if app.move_mode.active?
+                        app.selected << self if app.selected.empty?
+                        move(main_slot) if app.selected[0] == self
+                    elsif app.select_mode.active?
+                        select(main_slot)
+                        delete(main_slot) if b == 3
+                    end
+                }
+                
             end
+            
+            @points.clear
+            app.multi_step = nil
         end
     end
     

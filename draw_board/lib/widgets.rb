@@ -95,3 +95,96 @@ class CheckText < Shoes::Widget
     end
 end
 
+
+
+module ToolsCommon
+    
+    def initialize(tool, options={})
+        @width = options[:width] ||= 40
+        @height = options[:height] ||= 40
+        @margin = options[:margin] ||= [0,0,0,0]
+        
+        self.width = @width + margin[0] + margin[2]
+        self.height = @height + margin[1] + margin[3]
+        self.margin = @margin
+        
+        @active = false
+        
+        @slt = flow width: @width, height: @height do
+            @bkg = background gray(200)
+            @brd = border orange, hidden: true
+            hover { @brd.show }
+            leave { @brd.hide }
+            click { 
+                app.send "#{tool}_mode=", !active?
+                active? ? deactivate : activate
+            }
+        end
+    end
+    
+    def plug_events(tool)
+        
+        click { 
+            app.send tool, !active?
+            active? ? deactivate : activate
+        }
+    end
+    
+    def activate
+        @bkg.fill = red(0.3)
+        @slt.refresh_slot
+        @active = true
+    end
+    
+    def deactivate
+        @bkg.fill = gray(200)
+        @slt.refresh_slot
+        @active = false
+    end
+    
+    def active?
+        @active
+    end
+end
+
+class SelectTool < Shoes::Widget
+    include ToolsCommon
+    
+    def initialize(options={})
+        super("select", options)
+        
+        @slt.after(@bkg) {
+            shape fill: gray(25, 0.5) do
+                move_to 7,7
+                line_to 12,22; line_to 12,14; line_to 29,31; line_to 31,29
+                line_to 14,12; line_to 22,12; line_to 7,7
+            end
+        }
+        
+    end
+
+end
+
+class MoveTool < Shoes::Widget
+    include ToolsCommon
+    
+    def initialize(options={})
+        super("move", options)
+        
+        @slt.after(@bkg) {
+            shape fill: gray(25, 0.5) do
+                move_to 20,5
+                line_to 25,10; line_to 22,10; line_to 22,18; line_to 30,18; line_to 30,15
+                line_to 35,20; line_to 30,25; line_to 30,22; line_to 22,22; line_to 22,30
+                line_to 25,30; line_to 20,35; line_to 15,30; line_to 18,30; line_to 18,22
+                line_to 10,22; line_to 10,25; line_to 5,20; line_to 10,15; line_to 10,18
+                line_to 18,18; line_to 18,10; line_to 15,10; line_to 20,5
+            end
+        }
+    end
+    
+end
+
+
+
+

@@ -11,7 +11,7 @@ module ShapesLife
         
         anim = @myApp.animate(25) do |fr|
             b, l, t = @myApp.mouse
-            current_shape.move l-@myApp.buttons_width, t-@myApp.canvas_top
+            current_shape.move l-@myApp.canvas_left, t-@myApp.canvas_top
             if not @moving
                 anim.stop; anim.remove; anim = nil
             end
