@@ -27,10 +27,11 @@ class PolygonWidget < Shoes::Widget
             @points.pop
             @temps.each &:remove; @temps.clear
             
-            minx = @points.transpose[0].min
-            miny = @points.transpose[1].min
-            @width = @points.transpose[0].max - minx
-            @height = @points.transpose[1].max - miny
+            points_tr = @points.transpose
+            minx = points_tr[0].min
+            miny = points_tr[1].min
+            @width = points_tr[0].max - minx
+            @height = points_tr[1].max - miny
             startx = (@ox > minx ? @ox-minx : 0) + app.stroke_width
             starty = (@oy > miny ? @oy-miny : 0) + app.stroke_width
             

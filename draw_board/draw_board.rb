@@ -2,7 +2,6 @@
 
 $: << File.expand_path("lib", File.dirname(__FILE__))
 
-require 'base'
 require 'polyline'
 require 'segment'
 require 'curve'
@@ -16,15 +15,14 @@ require 'widgets'
 
 Shoes.app title: 'Drawing Shapes', width: 910 do
     
-    @polyline = Polyline.new(self)
-    @segment = Segment.new(self)
-    @curve = Curve.new(self)
-    @polygw = PolygonWidget
-    @ellw = EllipseWidget
-    @rectangle = Rectangle.new(self)
-    @star = Star.new(self)
-    @arrow = Arrow.new(self)
-    
+    @polyline = PolylineWidget
+    @segment = SegmentWidget
+    @curve = CurveWidget
+    @polygone = PolygonWidget
+    @ellipse = EllipseWidget
+    @rectangle = RectangleWidget
+    @star = StarWidget
+    @arrow = ArrowWidget
     
     CANVAS_LEFT = 120
     CANVAS_TOP = 20
@@ -34,11 +32,7 @@ Shoes.app title: 'Drawing Shapes', width: 910 do
     background gray
     
     stack width: CANVAS_LEFT, margin: [5, CANVAS_TOP+5, 0, 0] do
-        [ @polyline, @segment, @curve, @rectangle, @star, @arrow, #, @polygon, @ellipse
-        ].each do |shp|
-            button(shp.class.to_s, width: 100) { set_shape_params shp }
-        end
-        [@ellw, @polygw ].each do |shp|
+        [@polyline, @segment, @curve, @polygone, @ellipse, @rectangle, @star, @arrow].each do |shp|
             button(shp.to_s.sub("Widget", ''), width: 100) { set_shape_params shp }
         end
         
@@ -55,18 +49,17 @@ Shoes.app title: 'Drawing Shapes', width: 910 do
     @drawings = flow(width: 640, height: 480, margin_top: CANVAS_TOP) { background white }
     
     @drawings.click do |button, left, top|
-#        puts "@current_shape : #{@current_shape}"
         unless @drawings_muted
-            if @current_shape == @ellw || @current_shape == @polygw
-                @drawings.append do 
-                    ellipse_widget(shape_width, shape_height).paint(button, left-CANVAS_LEFT, top-CANVAS_TOP) if @current_shape == @ellw
-                    if @current_shape == @polygw
-                        @multi_step ||= polygon_widget
-                        @multi_step.paint(button, left-CANVAS_LEFT, top-CANVAS_TOP)
-                    end
+            @drawings.append do 
+                
+                if [@polyline, @segment, @curve, @polygone].include? @current_shape
+                    
+                    @multi_step ||= send("#{@current_shape.to_s.sub('Widget', '_widget').downcase}")
+                    @multi_step.paint(button, left-CANVAS_LEFT, top-CANVAS_TOP)
+                else
+                    send("#{@current_shape.to_s.sub('Widget', '_widget').downcase}", shape_width, shape_height)
+                        .paint(button, left-CANVAS_LEFT, top-CANVAS_TOP)
                 end
-            else
-                @drawings.append { @current_shape.draw(button, left-CANVAS_LEFT, top-CANVAS_TOP) }
             end
         end
     end
@@ -128,42 +121,32 @@ Shoes.app title: 'Drawing Shapes', width: 910 do
             @fill_w.color = black
         end
         
-        params = case current_shape
-            when Rectangle  # Ellipse, 
-                [ @fill_w, @shape_dim_w, @shape_dim_h ].each &:show
-                @shape_dim_spikes.hide
-                {"width" => 100, "height" => 45}
-            when Star
-                [@fill_w, @shape_dim_w, @shape_dim_h, @shape_dim_spikes
-                ].each &:show
-                {"count" => 5, "outer" => 60, "inner" => 35}
-            when Arrow
-                [ @fill_w, @shape_dim_w].each &:show
-                [@shape_dim_h, @shape_dim_spikes].each &:hide
-                {"width" => 60}
-            when Polyline, Segment, Curve
-                [@fill_w, @shape_dim_w, @shape_dim_h, @shape_dim_spikes
-                ].each &:hide
-                {"blank" => nil}
-#            when Polygon
-#                [@shape_dim_w, @shape_dim_h, @shape_dim_spikes
-#                ].each &:hide
-#                @fill_w.show
-#                {"blank" => nil}
-            else
-#                Shoes.show_log
-#                raise "Unknown Shape : #{current_shape.inspect}"
-            end
-        
-        if current_shape == EllipseWidget
+        params = 
+        if [EllipseWidget, RectangleWidget].include? current_shape
             [ @fill_w, @shape_dim_w, @shape_dim_h ].each &:show
             @shape_dim_spikes.hide
-            params = {"width" => 100, "height" => 45}
+            {"width" => 100, "height" => 45}
+            
+        elsif current_shape == StarWidget
+            [@fill_w, @shape_dim_w, @shape_dim_h, @shape_dim_spikes
+            ].each &:show
+            {"count" => 5, "outer" => 60, "inner" => 35}
+            
+        elsif current_shape == ArrowWidget
+            [ @fill_w, @shape_dim_w].each &:show
+            [@shape_dim_h, @shape_dim_spikes].each &:hide
+            {"width" => 60}
+            
         elsif current_shape == PolygonWidget
             [@shape_dim_w, @shape_dim_h, @shape_dim_spikes
             ].each &:hide
             @fill_w.show
-            params = {"blank" => nil}
+            {"blank" => nil}
+            
+        elsif [PolylineWidget, SegmentWidget, CurveWidget].include? current_shape
+            [@fill_w, @shape_dim_w, @shape_dim_h, @shape_dim_spikes
+            ].each &:hide
+            {"blank" => nil}
         end
                 
         params.each do |param, value|

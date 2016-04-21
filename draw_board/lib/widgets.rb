@@ -112,9 +112,10 @@ module ToolsCommon
         
         @slt = flow width: @width, height: @height do
             @bkg = background gray(200)
-            @brd = border orange, hidden: true
-            hover { @brd.show }
-            leave { @brd.hide }
+            brd = border orange, hidden: true
+            
+            hover { brd.show }
+            leave { brd.hide }
             click { 
                 app.send "#{tool}_mode=", !active?
                 active? ? deactivate : activate
@@ -122,13 +123,13 @@ module ToolsCommon
         end
     end
     
-    def plug_events(tool)
-        
-        click { 
-            app.send tool, !active?
-            active? ? deactivate : activate
-        }
-    end
+#    def plug_events(tool)
+#        
+#        click { 
+#            app.send tool, !active?
+#            active? ? deactivate : activate
+#        }
+#    end
     
     def activate
         @bkg.fill = red(0.3)

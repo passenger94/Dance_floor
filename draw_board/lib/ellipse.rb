@@ -18,7 +18,7 @@ class EllipseWidget < Shoes::Widget
         main_slot = flow left: left-@width/2, top: top-@height/2, 
                     width: @width+app.stroke_width*2, height: @height+app.stroke_width*2 do
             
-            oval 0+app.stroke_width, 0+app.stroke_width, app.shape_width, app.shape_height, 
+            oval app.stroke_width, app.stroke_width, app.shape_width, app.shape_height, 
                     stroke: app.stroke_color, strokewidth: app.stroke_width, fill: app.fill_color
             @brd = border darkorange, dash: :onedot, hidden: true
             
