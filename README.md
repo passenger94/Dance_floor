@@ -13,5 +13,5 @@ breakout.rb : a breakout game using video's playlist to manage sounds
 
 pasty.rb : a clipboard copy/paste manager. An app entirely made of a Shoes::Widget !
 
- 	
+draw_board.rb : a wip paint app using shapes and lines
  	
