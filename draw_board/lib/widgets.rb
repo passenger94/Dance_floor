@@ -123,14 +123,6 @@ module ToolsCommon
         end
     end
     
-#    def plug_events(tool)
-#        
-#        click { 
-#            app.send tool, !active?
-#            active? ? deactivate : activate
-#        }
-#    end
-    
     def activate
         @bkg.fill = red(0.3)
         @slt.refresh_slot

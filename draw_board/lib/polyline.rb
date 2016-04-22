@@ -20,6 +20,7 @@ class PolylineWidget < Shoes::Widget
         
         if @points.size == 1
             @ox, @oy = left, top
+            
         end
         
         if @points.size >= 2
@@ -65,7 +66,6 @@ class PolylineWidget < Shoes::Widget
             end
             
             @points.clear
-            ## FIXME don't allow to do anything else until the shape is "closed"'
             app.multi_step = nil
         end
     end
